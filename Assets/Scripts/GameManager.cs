@@ -144,6 +144,8 @@ public class GameManager : MonoBehaviour {
 	public Text UpgradeButtonActiveText=null;
 	public Text BuildOnPlotText = null;
 
+    public float speed = 2f;
+
 
 
 
@@ -232,6 +234,8 @@ public class GameManager : MonoBehaviour {
 
 		//Initial requirements for buying a TownStructure
 		initializeInitialGoldReqForTownStructures ();
+
+
 
 
 
@@ -418,14 +422,34 @@ IEnumerator QuestPanelDisplay(){
 		}
 
 	}
+  
 
-	
-	// Update is called once per frame
-	void Update () {
-		//QuestPanel.SetActive (true);
-	//instruction.text = "90 ";
 
-	gdotPanel.SetActive (false);
+    // Update is called once per frame
+    void Update () {
+        //QuestPanel.SetActive (true);
+        //instruction.text = "90 ";
+
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            transform.Translate(new Vector3(speed * Time.deltaTime, 0, 0));
+        }
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            transform.Translate(new Vector3(-speed * Time.deltaTime, 0, 0));
+        }
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            transform.Translate(new Vector3(0, -speed * Time.deltaTime, 0));
+        }
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            transform.Translate(new Vector3(0, speed * Time.deltaTime, 0));
+        }
+
+
+
+        gdotPanel.SetActive (false);
 	rdotPanel.SetActive (false);
 		if (gameStart) {
 			if (gameTimer == whenToStartAttack && isAttackStart == false) {
