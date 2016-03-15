@@ -7,8 +7,8 @@ public class CameraControl : MonoBehaviour {
 //	var cameraRect;
 	float speed = 2f;
 	float MIN_X = -3.8f;
-	float MAX_X = 4.2f;
-	float MIN_Y = -6f;
+	float MAX_X = 4.1f;
+	float MIN_Y = -5.9f;
 	float MAX_Y = 5.9f;
 
 

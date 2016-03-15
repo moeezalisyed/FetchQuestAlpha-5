@@ -12,7 +12,9 @@ public class StartScreenManager : MonoBehaviour {
 	public string inputstring;
 	public bool isPrompt;
 
+
 	public AudioSource menuyessound;
+
 
 
 
@@ -23,7 +25,7 @@ public class StartScreenManager : MonoBehaviour {
 		menuyesbutton.GetComponent<Button> ();
 		menuyesbutton.onClick.AddListener (() => UserInputPrompt ());
 		//MessagePrompt.GetComponent<Text> ();
-		InputText.GetComponent<Text> ();
+		//InputText.GetComponent<Text> ();
 		menuyessound.GetComponent<AudioSource> ();
 		isPrompt = false;
 		inputstring = null;
@@ -35,30 +37,30 @@ public class StartScreenManager : MonoBehaviour {
 	{
 		fqlogo.gameObject.SetActive (false);
 		menuyesbutton.gameObject.SetActive (false);
-		//MessagePrompt.gameObject.SetActive (true);
-		//InputText.gameObject.SetActive (true);
 		isPrompt = true;
 
 	}
 
 	void Update(){
+
+
 		if (isPrompt) 
 		{
-			//menuyesbutton.transform.Translate (new Vector3 (5f* Time.deltaTime, 0, 0));
-//			if (Input.GetKey (KeyCode.Backspace) && inputstring.Length > 0) {
-//				inputstring = inputstring.Remove (inputstring.Length - 1);
-//			}
-//			if (Input.GetKeyDown (KeyCode.Return) && inputstring.Length > 0) {
-//				//fade here, start unity scene, etc.
-			//menuyessound.Play();
-			StartCoroutine (LoadGame ());
-
+			
+			StartCoroutine(LoadGame());
+				
 		}
+
+}
 			
 
-	}
+
+
+	
+
 	IEnumerator LoadGame(){
 		yield return new WaitForSeconds (2);
-		SceneManager.LoadScene("QGiver");
+		SceneManager.LoadScene("QGiver");	
+		
 	}
 }
