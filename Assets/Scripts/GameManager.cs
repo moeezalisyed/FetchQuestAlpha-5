@@ -144,8 +144,9 @@ public class GameManager : MonoBehaviour {
 	public Text UpgradeButtonActiveText=null;
 	public Text BuildOnPlotText = null;
 
-	public float dragSpeed = 2;
-	private Vector3 dragOrigin;
+
+
+    public float speed = 2f;
 
 
 
@@ -235,6 +236,7 @@ public class GameManager : MonoBehaviour {
 
 		//Initial requirements for buying a TownStructure
 		initializeInitialGoldReqForTownStructures ();
+
 
 
 
@@ -423,26 +425,36 @@ IEnumerator QuestPanelDisplay(){
 
 	}
 
-	
-	// Update is called once per frame
-	void Update () {
-		//QuestPanel.SetActive (true);
-		//instruction.text = "90 ";
-		if (Input.GetMouseButtonDown (0)) {
-			dragOrigin = Input.mousePosition;
-			return;
-		}
-
-		if (!Input.GetMouseButton (0))
-			return;
-
-		Vector3 pos = Camera.main.ScreenToViewportPoint (Input.mousePosition - dragOrigin);
-		Vector3 move = new Vector3 (pos.x * dragSpeed, 0, pos.y * dragSpeed);
-
-		transform.Translate (move, Space.World);
 
 
-	gdotPanel.SetActive (false);
+  
+
+
+    // Update is called once per frame
+    void Update () {
+        //QuestPanel.SetActive (true);
+        //instruction.text = "90 ";
+
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            transform.Translate(new Vector3(speed * Time.deltaTime, 0, 0));
+        }
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            transform.Translate(new Vector3(-speed * Time.deltaTime, 0, 0));
+        }
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            transform.Translate(new Vector3(0, -speed * Time.deltaTime, 0));
+        }
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            transform.Translate(new Vector3(0, speed * Time.deltaTime, 0));
+        }
+
+
+
+        gdotPanel.SetActive (false);
 	rdotPanel.SetActive (false);
 		if (gameStart) {
 			if (gameTimer == whenToStartAttack && isAttackStart == false) {
