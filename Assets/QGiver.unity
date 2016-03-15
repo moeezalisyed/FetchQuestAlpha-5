@@ -633,6 +633,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 157389565}
   - 61: {fileID: 157389566}
+  - 114: {fileID: 157389567}
   m_Layer: 0
   m_Name: Collider Plot 1
   m_TagString: Untagged
@@ -665,6 +666,24 @@ BoxCollider2D:
   m_Offset: {x: .0218334198, y: .00727701187}
   serializedVersion: 2
   m_Size: {x: 1.0436672, y: 1.02911091}
+--- !u!114 &157389567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 157389564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffd358fd3f67db145881d79aad3bb42f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  updateLevel: 1
+  structureType: 0
+  goldReq: 0
+  timer: 0
+  parentGameManager: {fileID: 0}
+  xname: 
+  structManager: {fileID: 0}
 --- !u!1 &163629203
 GameObject:
   m_ObjectHideFlags: 0
@@ -3621,6 +3640,8 @@ MonoBehaviour:
   curQuestCheck: {fileID: 0}
   whenToStartAttack: 1195
   isAttackStart: 0
+  isBuyingBuilding: 0
+  curStructType: 0
   pos: {x: 130, y: 190}
   size: {x: 100, y: 20}
   emptyTex: {fileID: 0}
@@ -3656,6 +3677,20 @@ MonoBehaviour:
   UpgradeButtonActiveText: {fileID: 0}
   BuildOnPlotText: {fileID: 0}
   speed: 10
+  plotCollider1Obj: {fileID: 0}
+  plotCollider2Obj: {fileID: 0}
+  plotCollider3Obj: {fileID: 0}
+  plotCollider4Obj: {fileID: 0}
+  plotCollider5Obj: {fileID: 0}
+  plotCollider6Obj: {fileID: 0}
+  plotCollider1: {fileID: 0}
+  plotCollider2: {fileID: 0}
+  plotCollider3: {fileID: 0}
+  plotCollider4: {fileID: 0}
+  plotCollider5: {fileID: 0}
+  plotCollider6: {fileID: 0}
+  plotCols: []
+  plotObjs: []
 --- !u!1 &980063305
 GameObject:
   m_ObjectHideFlags: 0
@@ -5847,6 +5882,8 @@ MonoBehaviour:
   curQuestCheck: {fileID: 0}
   whenToStartAttack: 1190
   isAttackStart: 0
+  isBuyingBuilding: 0
+  curStructType: 0
   pos: {x: 20, y: 40}
   size: {x: 60, y: 20}
   emptyTex: {fileID: 0}
@@ -5882,6 +5919,20 @@ MonoBehaviour:
   UpgradeButtonActiveText: {fileID: 251877817}
   BuildOnPlotText: {fileID: 1814287981}
   speed: 10
+  plotCollider1Obj: {fileID: 0}
+  plotCollider2Obj: {fileID: 0}
+  plotCollider3Obj: {fileID: 0}
+  plotCollider4Obj: {fileID: 0}
+  plotCollider5Obj: {fileID: 0}
+  plotCollider6Obj: {fileID: 0}
+  plotCollider1: {fileID: 0}
+  plotCollider2: {fileID: 0}
+  plotCollider3: {fileID: 0}
+  plotCollider4: {fileID: 0}
+  plotCollider5: {fileID: 0}
+  plotCollider6: {fileID: 0}
+  plotCols: []
+  plotObjs: []
 --- !u!1 &1627961894
 GameObject:
   m_ObjectHideFlags: 0

@@ -48,7 +48,7 @@ public class Player : MonoBehaviour {
 
 	public void init (GameManager m) {
 		playerManager = m;
-		this.Gold = 100;
+		this.Gold = 10000;
         this.XP = 100;
 
         this.incrementalIncome = 0;

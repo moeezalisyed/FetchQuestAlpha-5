@@ -69,11 +69,12 @@ public class GameManager : MonoBehaviour {
 	public Quest curQuestCheck = null;
 	public int whenToStartAttack = 1000;
 	public bool isAttackStart = false;
+    public bool isBuyingBuilding = false;
+    public int curStructType;
 
 
-
-	//Make a Bar
-	public Vector2 pos = new Vector2(Screen.width - 100 ,Screen.width - 40);
+    //Make a Bar
+    public Vector2 pos = new Vector2(Screen.width - 100 ,Screen.width - 40);
 	public Vector2 size = new Vector2(100,20);
 	public Texture2D emptyTex;
 	//public Texture2D fullTexG = Resources.Load("gdot");
@@ -154,7 +155,27 @@ public class GameManager : MonoBehaviour {
 
 	Player PlayerCharacter;
 
-	/*void Start(){
+    public GameObject plotCollider1Obj;
+    public GameObject plotCollider2Obj;
+    public GameObject plotCollider3Obj;
+    public GameObject plotCollider4Obj;
+    public GameObject plotCollider5Obj;
+    public GameObject plotCollider6Obj;
+
+    public BoxCollider2D plotCollider1;
+    public BoxCollider2D plotCollider2;
+    public BoxCollider2D plotCollider3;
+    public BoxCollider2D plotCollider4;
+    public BoxCollider2D plotCollider5;
+    public BoxCollider2D plotCollider6;
+
+    public List<BoxCollider2D> plotCols;
+
+    public List<GameObject> plotObjs;
+
+
+
+    /*void Start(){
 		UpgradeButtonActiveText.GetComponent <Text> (); //When the Upgrade button is clicked
 		UpgradeButtonActiveText.gameObject.SetActive (false);
 		BuildOnPlotText.GetComponent<Text> (); //When goldCheckandBuy is successful
@@ -174,12 +195,12 @@ public class GameManager : MonoBehaviour {
 
 
 		initPanel = GameObject.Find("Standard Panel"); /*Initial panel*/
-	/*	BuyPanel = GameObject.Find ("Buy Panel"); /*Buy Window*/
-	/*	BuyPanel.SetActive (false);
+    /*	BuyPanel = GameObject.Find ("Buy Panel"); /*Buy Window*/
+    /*	BuyPanel.SetActive (false);
 
 
 		BuyBuildingsPanel = GameObject.Find ("List of Buildings Panel"); /*List of buildings to buy*/
-	/*	initPanel.SetActive (false); //initpanel sets to true
+    /*	initPanel.SetActive (false); //initpanel sets to true
 		BuyBuildingsPanel.SetActive(false);
 		//NewQuestAvailabe
 		NewQuestAvailablePanel = GameObject.Find("NewQuestAvailable");
@@ -188,7 +209,7 @@ public class GameManager : MonoBehaviour {
 		StartCoroutine (Welcome ());
 	}*/
 
-	void Start () {
+    void Start () {
 		gameStart = true;	
 		whenToStartAttack = 1000;
 		
@@ -219,10 +240,12 @@ public class GameManager : MonoBehaviour {
 		//gameTimer = 1200;
 		initialiseTown ();
 
-		//this.THETOWN.startMaintenanceTimer ();
+        initialisePlotColliders();
 
-		/*Hiding the appropriate text windows*/
-		UpgradeButtonActiveText.GetComponent <Text> (); //When the Upgrade button is clicked
+        //this.THETOWN.startMaintenanceTimer ();
+
+        /*Hiding the appropriate text windows*/
+        UpgradeButtonActiveText.GetComponent <Text> (); //When the Upgrade button is clicked
 		UpgradeButtonActiveText.gameObject.SetActive (false);
 		BuildOnPlotText.GetComponent<Text> (); //When goldCheckandBuy is successful
 		BuildOnPlotText.gameObject.SetActive(false);
@@ -325,8 +348,53 @@ public class GameManager : MonoBehaviour {
 
 
 	}
+    void initialisePlotColliders()
+    {
+        plotCollider1Obj = GameObject.Find("Collider Plot 1");
+        plotObjs.Add(plotCollider1Obj);
+        plotCollider2Obj = GameObject.Find("Collider Plot 2");
+        plotObjs.Add(plotCollider2Obj);
+        plotCollider3Obj = GameObject.Find("Collider Plot 3");
+        plotObjs.Add(plotCollider3Obj);
+        plotCollider4Obj = GameObject.Find("Collider Plot 4");
+        plotObjs.Add(plotCollider4Obj);
+        plotCollider5Obj = GameObject.Find("Collider Plot 5");
+        plotObjs.Add(plotCollider5Obj);
+        plotCollider6Obj = GameObject.Find("Collider Plot 6");
+        plotObjs.Add(plotCollider6Obj);
 
-	IEnumerator Welcome(){
+        foreach (GameObject go in plotObjs)
+        {
+            Rigidbody2D tempRig = go.AddComponent<Rigidbody2D>();
+            LandPlots tempPlots = go.AddComponent<LandPlots>();
+            TownStructure tstruct = go.AddComponent<TownStructure>();
+            tempPlots.init(this, go);
+            tempRig.isKinematic = false;
+            tempRig.gravityScale = 0f;
+        }
+
+        plotCollider1 = plotCollider1Obj.GetComponent<BoxCollider2D>();
+        plotCols.Add(plotCollider1);
+        plotCollider2 = plotCollider2Obj.GetComponent<BoxCollider2D>();
+        plotCols.Add(plotCollider2);
+        plotCollider3 = plotCollider3Obj.GetComponent<BoxCollider2D>();
+        plotCols.Add(plotCollider3);
+        plotCollider4 = plotCollider4Obj.GetComponent<BoxCollider2D>();
+        plotCols.Add(plotCollider4);
+        plotCollider5 = plotCollider5Obj.GetComponent<BoxCollider2D>();
+        plotCols.Add(plotCollider5);
+        plotCollider6 = plotCollider6Obj.GetComponent<BoxCollider2D>();
+        plotCols.Add(plotCollider6);
+
+        foreach (BoxCollider2D boxy in plotCols)
+        {
+            boxy.isTrigger = true;
+        }
+
+
+    }
+
+    IEnumerator Welcome(){
 	//	print ("This coroutine");
 		welcomeTimer = 30;
 		while (this.welcomeTimer > 0) {
@@ -389,6 +457,7 @@ IEnumerator HeroPanelDisplay(){
 		
 		HeroPanel.SetActive (false);
 }
+
 
 IEnumerator QuestPanelDisplay(){
 	while (gameStart) {
@@ -456,7 +525,7 @@ IEnumerator QuestPanelDisplay(){
 				isAttackStart = true;
 				StartCoroutine (AttackRoutine ());
 				print ("did start");
-				buyTownStructure (5);
+				//buyTownStructure (5);
 				firstAttack = true;
 			}
 		}
@@ -486,7 +555,7 @@ IEnumerator QuestPanelDisplay(){
 		if (welcomeTimer > 0) {
 			//welcomeTimer--;
 		THEPLAYER.XP = 100;
-			THEPLAYER.Gold = 100;
+			THEPLAYER.Gold = 1000;
 		THETOWN.infrastructureLevel = 50;
 		} else {
 			welcomeGUI = false;	
@@ -624,6 +693,7 @@ IEnumerator QuestPanelDisplay(){
 
 
 		curHero.init(heroClass, this);							// Initialize the hero script.
+        curHero.XP = 81;
 		curHero.name = "Hero "+ HeroesSet.Count;						// Give the gem object a name in the Hierarchy pane.
 		HeroesSet.Add(curHero);
 		AvailableHeroesSet.Add (curHero);
@@ -690,13 +760,15 @@ IEnumerator QuestPanelDisplay(){
 		if (THEPLAYER.Gold >= goldRequired) {
 			if (TownStructureType == 3) {
 				if (TownStructureSet.Count >= 1) {
-					//buyTownStructure (TownStructureType);
-					THEPLAYER.Gold -= goldRequired;
+                    //buyTownStructure (TownStructureType);
+                    curStructType = TownStructureType;
+                    this.isBuyingBuilding = true;
+                    THEPLAYER.Gold -= goldRequired;
 					BuyBuildingsPanel.SetActive (false);
 					//print("Successful");
 					//BuildOnPlotText.gameObject.SetActive (true);
 					initPanel.SetActive (true);
-					buyTownStructure (TownStructureType);
+					//buyTownStructure (TownStructureType);
 					StartCoroutine (updateSucccBuyCheck ());
 				} else {
 					StartCoroutine (NotEnoughForTannery ());
@@ -711,13 +783,15 @@ IEnumerator QuestPanelDisplay(){
 				}
 
 				if (canTrue) {
-				//buyTownStructure (TownStructureType);
-				THEPLAYER.Gold -= goldRequired;
+                    //buyTownStructure (TownStructureType);
+                    curStructType = TownStructureType;
+                    this.isBuyingBuilding = true;
+                    THEPLAYER.Gold -= goldRequired;
 				BuyBuildingsPanel.SetActive (false);
 				//print("Successful");
 				//BuildOnPlotText.gameObject.SetActive (true);
 				initPanel.SetActive (true);
-				buyTownStructure (TownStructureType);
+				//buyTownStructure (TownStructureType);
 				StartCoroutine (updateSucccBuyCheck ());
 				} else {
 					StartCoroutine (NoRougeforWorkshop ());
@@ -733,13 +807,15 @@ IEnumerator QuestPanelDisplay(){
 			}
 
 			if (canTrue) {
-				//buyTownStructure (TownStructureType);
-				THEPLAYER.Gold -= goldRequired;
+                    //buyTownStructure (TownStructureType);
+                    curStructType = TownStructureType;
+                    this.isBuyingBuilding = true;
+                    THEPLAYER.Gold -= goldRequired;
 				BuyBuildingsPanel.SetActive (false);
 				//print("Successful");
 				//BuildOnPlotText.gameObject.SetActive (true);
 				initPanel.SetActive (true);
-				buyTownStructure (TownStructureType);
+				//buyTownStructure (TownStructureType);
 				StartCoroutine (updateSucccBuyCheck ());
 			} else {
 				StartCoroutine (NotWarriorForApothecary ());
@@ -755,13 +831,15 @@ IEnumerator QuestPanelDisplay(){
 			}
 
 			if (canTrue) {
-				//buyTownStructure (TownStructureType);
-				THEPLAYER.Gold -= goldRequired;
+                    //buyTownStructure (TownStructureType);
+                    curStructType = TownStructureType;
+                    this.isBuyingBuilding = true;
+                    THEPLAYER.Gold -= goldRequired;
 				BuyBuildingsPanel.SetActive (false);
 				//print("Successful");
 				//BuildOnPlotText.gameObject.SetActive (true);
 				initPanel.SetActive (true);
-				buyTownStructure (TownStructureType);
+				//buyTownStructure (TownStructureType);
 				StartCoroutine (updateSucccBuyCheck ());
 			} else {
 				StartCoroutine (NotJuggernautForBlackSmith ());
@@ -779,13 +857,15 @@ IEnumerator QuestPanelDisplay(){
 			}
 
 			if (canTrue) {
-				//buyTownStructure (TownStructureType);
-				THEPLAYER.Gold -= goldRequired;
+                    curStructType = TownStructureType;
+                    this.isBuyingBuilding = true;
+                    //buyTownStructure (TownStructureType);
+                    THEPLAYER.Gold -= goldRequired;
 				BuyBuildingsPanel.SetActive (false);
 				//print("Successful");
 				//BuildOnPlotText.gameObject.SetActive (true);
 				initPanel.SetActive (true);
-				buyTownStructure (TownStructureType);
+				//buyTownStructure (TownStructureType);
 				StartCoroutine (updateSucccBuyCheck ());
 			} else {
 				StartCoroutine (NotOracleForChurch ());
@@ -794,14 +874,15 @@ IEnumerator QuestPanelDisplay(){
 		} 
 			else {
 
-
-				//buyTownStructure (TownStructureType);
-				THEPLAYER.Gold -= goldRequired;
+                curStructType = TownStructureType;
+                this.isBuyingBuilding = true;
+                //buyTownStructure (TownStructureType);
+                THEPLAYER.Gold -= goldRequired;
 				BuyBuildingsPanel.SetActive (false);
 				//print("Successful");
 				//BuildOnPlotText.gameObject.SetActive (true);
 				initPanel.SetActive (true);
-				buyTownStructure (TownStructureType);
+				//buyTownStructure (TownStructureType);
 				StartCoroutine (updateSucccBuyCheck ());
 			}
 
@@ -869,11 +950,12 @@ IEnumerator NotOracleForChurch(){
 
 
 	IEnumerator updateSucccBuyCheck(){
-		updateSuccBuyCheck = true;
-		yield return new WaitForSeconds (3);
-		updateSuccBuyCheck = false;
+        updateSuccBuyCheck = true;
+        yield return new WaitForSeconds(3);
+        updateSuccBuyCheck = false;
+        this.curStructType = -1;
 
-	}
+    }
 
 	IEnumerator updateFailureBuyCheck(){
 		
@@ -886,40 +968,31 @@ IEnumerator NotOracleForChurch(){
 
 
 
-	void buyTownStructure(int TownStructureType){
-		GameObject townStructureObject = new GameObject ();
-		TownStructure newTownStructure = townStructureObject.AddComponent<TownStructure> ();
-		newTownStructure.transform.parent = TownStructureFolder.transform;
-		Vector3 positionOnMap = new Vector3(0,0,0);
-		newTownStructure.transform.position  = positionOnMap;
+    public void buyTownStructure(int TownStructureType, Vector3 pos)
+    {
+        GameObject townStructureObject = new GameObject();
+        TownStructure newTownStructure = townStructureObject.AddComponent<TownStructure>();
+        newTownStructure.transform.parent = TownStructureFolder.transform;
+        Vector3 positionOnMap = pos;
+        //		pos.z = -1;
+        newTownStructure.transform.position = positionOnMap;
 
-		BoxCollider2D townBox = townStructureObject.AddComponent<BoxCollider2D>();
-		Rigidbody2D townRig = townStructureObject.AddComponent<Rigidbody2D> ();
+        BoxCollider2D townBox = townStructureObject.AddComponent<BoxCollider2D>();
+        Rigidbody2D townRig = townStructureObject.AddComponent<Rigidbody2D>();
+        print("made it this far");
+        townBox.isTrigger = true;
+        townRig.gravityScale = 0f;
+        townRig.isKinematic = true;
+        newTownStructure.init(TownStructureType, this, THEPLAYER);
 
+        newTownStructure.name = "TownStructure " + TownStructureSet.Count;
+        //TownStructureSet.Add(newTownStructure);
 
-		townBox.isTrigger = true;
-		townRig.gravityScale = 0f;
-		townRig.isKinematic = true;
+    }
 
-		// ************
-		// The first parameter for the init funciton was set to zero, but I changed it to TOwnStructureType as it should have been
-		// ************
-		newTownStructure.init (TownStructureType, this, THEPLAYER);
+    // We get the TownStructure from the GUI and Colliders
 
-		newTownStructure.name = "TownStructure " + TownStructureSet.Count;
-	if (TownStructureType  <5) {
-			TownStructureSet.Add (newTownStructure);
-		}
-
-		//This part will add the location for it on map
-
-		//Use the following function to get the mouse points;
-
-	}
-
-	// We get the TownStructure from the GUI and Colliders
-
-	public void goldCheckAndUpdate(TownStructure toCheck){
+    public void goldCheckAndUpdate(TownStructure toCheck){
 		int goldReq = toCheck.goldReq;
 		if (THEPLAYER.Gold > goldReq + 15) {
 			updateTownStructure (toCheck);
